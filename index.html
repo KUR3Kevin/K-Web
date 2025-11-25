@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Education Game - Master Your Money</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 Financial Education Game</h1>
+            <p class="tagline">Learn to manage money, invest wisely, and build wealth!</p>
+        </header>
+
+        <div class="game-stats">
+            <div class="stat-card">
+                <h3>Month</h3>
+                <p id="current-month">1</p>
+            </div>
+            <div class="stat-card highlight">
+                <h3>Cash Balance</h3>
+                <p id="cash-balance">$5,000</p>
+            </div>
+            <div class="stat-card">
+                <h3>Net Worth</h3>
+                <p id="net-worth">$5,000</p>
+            </div>
+            <div class="stat-card">
+                <h3>Monthly Income</h3>
+                <p id="monthly-income">$3,000</p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Income & Budget Section -->
+            <section class="panel">
+                <h2>📊 Income & Budget</h2>
+                <div class="info-box">
+                    <strong>Learn:</strong> Managing income and expenses is the foundation of financial health. Track what comes in and what goes out!
+                </div>
+
+                <div class="budget-section">
+                    <h3>Monthly Income: <span id="income-display">$3,000</span></h3>
+                    <div class="input-group">
+                        <label>Set Monthly Income:</label>
+                        <input type="number" id="income-input" value="3000" min="0" step="100">
+                        <button onclick="updateIncome()">Update</button>
+                    </div>
+                </div>
+
+                <div class="budget-section">
+                    <h3>Monthly Expenses</h3>
+                    <div id="expenses-list">
+                        <div class="expense-item">
+                            <span>Rent/Mortgage:</span>
+                            <input type="number" class="expense-input" data-category="rent" value="1000" min="0">
+                        </div>
+                        <div class="expense-item">
+                            <span>Food:</span>
+                            <input type="number" class="expense-input" data-category="food" value="400" min="0">
+                        </div>
+                        <div class="expense-item">
+                            <span>Transportation:</span>
+                            <input type="number" class="expense-input" data-category="transport" value="200" min="0">
+                        </div>
+                        <div class="expense-item">
+                            <span>Utilities:</span>
+                            <input type="number" class="expense-input" data-category="utilities" value="150" min="0">
+                        </div>
+                        <div class="expense-item">
+                            <span>Entertainment:</span>
+                            <input type="number" class="expense-input" data-category="entertainment" value="200" min="0">
+                        </div>
+                    </div>
+                    <div class="total-expenses">
+                        <strong>Total Monthly Expenses: <span id="total-expenses">$1,950</span></strong>
+                    </div>
+                    <div class="net-income">
+                        <strong>Net Monthly Income: <span id="net-monthly">$1,050</span></strong>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Savings Account Section -->
+            <section class="panel">
+                <h2>🏦 Savings Account</h2>
+                <div class="info-box">
+                    <strong>Learn:</strong> Compound interest means earning interest on your interest! The longer you save, the faster your money grows. Formula: A = P(1 + r/n)^(nt)
+                </div>
+
+                <div class="savings-info">
+                    <h3>Balance: <span id="savings-balance">$0</span></h3>
+                    <p>Interest Rate: <span id="savings-rate">2.5%</span> APY (Annual Percentage Yield)</p>
+                    <p>Interest Earned This Month: <span id="monthly-interest">$0</span></p>
+                    <p>Total Interest Earned: <span id="total-interest">$0</span></p>
+                </div>
+
+                <div class="action-group">
+                    <div class="input-group">
+                        <label>Deposit Amount:</label>
+                        <input type="number" id="savings-deposit" min="0" step="10" placeholder="Enter amount">
+                        <button onclick="depositToSavings()">Deposit</button>
+                    </div>
+                    <div class="input-group">
+                        <label>Withdraw Amount:</label>
+                        <input type="number" id="savings-withdraw" min="0" step="10" placeholder="Enter amount">
+                        <button onclick="withdrawFromSavings()">Withdraw</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Investment Portfolio Section -->
+            <section class="panel">
+                <h2>📈 Investment Portfolio</h2>
+                <div class="info-box">
+                    <strong>Learn:</strong> Investing in stocks means buying shares of companies. Stock prices fluctuate based on market conditions. Diversify to reduce risk!
+                </div>
+
+                <div class="portfolio-summary">
+                    <h3>Portfolio Value: <span id="portfolio-value">$0</span></h3>
+                    <p>Total Invested: <span id="total-invested">$0</span></p>
+                    <p>Gain/Loss: <span id="portfolio-gain">$0 (0%)</span></p>
+                </div>
+
+                <div class="stocks-container">
+                    <div class="stock-card">
+                        <h4>Tech Growth Inc.</h4>
+                        <p>Price: $<span id="stock1-price">100</span></p>
+                        <p>Shares Owned: <span id="stock1-shares">0</span></p>
+                        <p>Value: $<span id="stock1-value">0</span></p>
+                        <div class="input-group">
+                            <input type="number" id="stock1-amount" min="0" step="1" placeholder="Shares">
+                            <button onclick="buyStock(1)">Buy</button>
+                            <button onclick="sellStock(1)">Sell</button>
+                        </div>
+                    </div>
+
+                    <div class="stock-card">
+                        <h4>Stable Dividends Co.</h4>
+                        <p>Price: $<span id="stock2-price">50</span></p>
+                        <p>Shares Owned: <span id="stock2-shares">0</span></p>
+                        <p>Value: $<span id="stock2-value">0</span></p>
+                        <div class="input-group">
+                            <input type="number" id="stock2-amount" min="0" step="1" placeholder="Shares">
+                            <button onclick="buyStock(2)">Buy</button>
+                            <button onclick="sellStock(2)">Sell</button>
+                        </div>
+                    </div>
+
+                    <div class="stock-card">
+                        <h4>Energy Futures Ltd.</h4>
+                        <p>Price: $<span id="stock3-price">75</span></p>
+                        <p>Shares Owned: <span id="stock3-shares">0</span></p>
+                        <p>Value: $<span id="stock3-value">0</span></p>
+                        <div class="input-group">
+                            <input type="number" id="stock3-amount" min="0" step="1" placeholder="Shares">
+                            <button onclick="buyStock(3)">Buy</button>
+                            <button onclick="sellStock(3)">Sell</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Debt Management Section -->
+            <section class="panel">
+                <h2>💳 Debt Management</h2>
+                <div class="info-box">
+                    <strong>Learn:</strong> Debt accumulates interest over time. Credit cards often have high interest rates (15-25% APR). Pay off high-interest debt first to save money!
+                </div>
+
+                <div class="debt-summary">
+                    <h3>Total Debt: <span id="total-debt">$0</span></h3>
+                    <p>Monthly Interest Charges: <span id="monthly-debt-interest">$0</span></p>
+                </div>
+
+                <div class="debt-cards">
+                    <div class="debt-card">
+                        <h4>Credit Card</h4>
+                        <p>Balance: $<span id="credit-balance">0</span></p>
+                        <p>Interest Rate: 18% APR</p>
+                        <p>Minimum Payment: $<span id="credit-min-payment">0</span></p>
+                        <div class="input-group">
+                            <label>Borrow:</label>
+                            <input type="number" id="credit-borrow" min="0" step="50" placeholder="Amount">
+                            <button onclick="borrowCredit()">Borrow</button>
+                        </div>
+                        <div class="input-group">
+                            <label>Pay:</label>
+                            <input type="number" id="credit-pay" min="0" step="50" placeholder="Amount">
+                            <button onclick="payCredit()">Pay</button>
+                        </div>
+                    </div>
+
+                    <div class="debt-card">
+                        <h4>Personal Loan</h4>
+                        <p>Balance: $<span id="loan-balance">0</span></p>
+                        <p>Interest Rate: 8% APR</p>
+                        <p>Monthly Payment: $<span id="loan-payment">0</span></p>
+                        <div class="input-group">
+                            <label>Borrow:</label>
+                            <input type="number" id="loan-borrow" min="0" step="100" placeholder="Amount">
+                            <button onclick="borrowLoan()">Borrow</button>
+                        </div>
+                        <div class="input-group">
+                            <label>Pay:</label>
+                            <input type="number" id="loan-pay" min="0" step="100" placeholder="Amount">
+                            <button onclick="payLoan()">Pay</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Financial Goals Section -->
+            <section class="panel">
+                <h2>🎯 Financial Goals</h2>
+                <div class="goals-list">
+                    <div class="goal-item" id="goal1">
+                        <h4>Emergency Fund</h4>
+                        <p>Save $5,000 in your savings account</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="goal1-progress" style="width: 0%"></div>
+                        </div>
+                        <p class="goal-status" id="goal1-status">Progress: $0 / $5,000 (0%)</p>
+                    </div>
+                    <div class="goal-item" id="goal2">
+                        <h4>Investment Starter</h4>
+                        <p>Build a portfolio worth $3,000</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="goal2-progress" style="width: 0%"></div>
+                        </div>
+                        <p class="goal-status" id="goal2-status">Progress: $0 / $3,000 (0%)</p>
+                    </div>
+                    <div class="goal-item" id="goal3">
+                        <h4>Debt Free</h4>
+                        <p>Pay off all debt</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="goal3-progress" style="width: 100%"></div>
+                        </div>
+                        <p class="goal-status" id="goal3-status">Status: No Debt! ✓</p>
+                    </div>
+                    <div class="goal-item" id="goal4">
+                        <h4>Wealth Builder</h4>
+                        <p>Reach a net worth of $20,000</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="goal4-progress" style="width: 0%"></div>
+                        </div>
+                        <p class="goal-status" id="goal4-status">Progress: $5,000 / $20,000 (25%)</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="game-controls">
+            <button class="btn-primary" onclick="nextMonth()">⏭️ Next Month</button>
+            <button class="btn-secondary" onclick="resetGame()">🔄 Reset Game</button>
+            <button class="btn-secondary" onclick="showHelp()">❓ Help</button>
+        </div>
+
+        <!-- Event Log -->
+        <div class="event-log">
+            <h3>Event Log</h3>
+            <div id="log-messages"></div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeHelp()">&times;</span>
+            <h2>How to Play</h2>
+            <div class="help-section">
+                <h3>Game Objective</h3>
+                <p>Build wealth and achieve financial goals by managing your income, expenses, investments, and debt wisely.</p>
+
+                <h3>Key Concepts</h3>
+                <ul>
+                    <li><strong>Net Income:</strong> Income minus expenses. This is what you have left to save or invest.</li>
+                    <li><strong>Compound Interest:</strong> Earning interest on your interest. Your savings grow exponentially over time!</li>
+                    <li><strong>Investing:</strong> Buying stocks to grow wealth. Higher risk = higher potential returns.</li>
+                    <li><strong>Debt Interest:</strong> Money you pay for borrowing. High-interest debt grows quickly!</li>
+                    <li><strong>Net Worth:</strong> Total assets (cash + savings + investments) minus total debt.</li>
+                </ul>
+
+                <h3>Tips for Success</h3>
+                <ul>
+                    <li>Keep expenses lower than income to build savings</li>
+                    <li>Build an emergency fund before investing heavily</li>
+                    <li>Pay off high-interest debt (credit cards) first</li>
+                    <li>Diversify investments across different stocks</li>
+                    <li>Be patient - compound interest works best over time!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
