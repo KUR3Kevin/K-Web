@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: process.env.NODE_ENV === 'production' ? '.env' : '../.env' });
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
@@ -21,7 +21,7 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5000',
+  origin: process.env.CLIENT_URL || true,
   credentials: true
 }));
 app.use(express.json());
