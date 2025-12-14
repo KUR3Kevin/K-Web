@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Blog - Tech Insights</title>
+    <meta name="description" content="Personal thoughts and opinions on technology, AI, software development, and the tech industry.">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="site-logo">
+                    <a href="/">Tech Insights</a>
+                </h1>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="/news">News</a></li>
+                        <li><a href="/blog" class="active">Blog</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="#" class="donate-btn">Donate</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="blog-page">
+        <div class="container">
+            <div class="page-header">
+                <h2>Personal Tech Blog</h2>
+                <p>My thoughts, opinions, and insights on the tech world</p>
+            </div>
+
+            <div id="blog-grid" class="blog-grid">
+                <div class="loading">Loading blog posts...</div>
+            </div>
+
+            <div id="load-more-container" class="load-more-container" style="display: none;">
+                <button id="load-more-btn" class="btn btn-secondary">Load More Posts</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Blog Post Modal/View -->
+    <div id="blog-post-modal" class="modal" style="display: none;">
+        <div class="modal-content blog-post-full">
+            <button class="modal-close" id="close-modal">&times;</button>
+            <div id="blog-post-content"></div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Tech Insights</h4>
+                    <p>Your trusted source for technology news and insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/news">Latest News</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/admin">Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="/news?category=AI">AI</a></li>
+                        <li><a href="/news?category=Software">Software</a></li>
+                        <li><a href="/news?category=Hardware">Hardware</a></li>
+                        <li><a href="/news?category=Crypto/Stocks">Crypto/Stocks</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Tech Insights. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/blogPage.js"></script>
+</body>
+</html>

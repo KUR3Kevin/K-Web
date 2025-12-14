@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Tech Insights</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <!-- Login Form -->
+    <div id="login-container" class="login-container">
+        <div class="login-box">
+            <h2>Admin Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <div id="login-error" class="error-message"></div>
+            </form>
+            <a href="/" class="back-link">← Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="dashboard-container" class="dashboard-container" style="display: none;">
+        <header class="admin-header">
+            <div class="container">
+                <div class="admin-header-content">
+                    <h1>Admin Dashboard</h1>
+                    <div class="admin-nav">
+                        <a href="/" target="_blank" class="btn btn-secondary">View Site</a>
+                        <button id="logout-btn" class="btn btn-outline">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <div class="container">
+                <!-- Stats -->
+                <div id="stats-section" class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Approved Articles</h3>
+                        <p class="stat-number" id="total-articles">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pending Articles</h3>
+                        <p class="stat-number" id="pending-articles">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Published Blog Posts</h3>
+                        <p class="stat-number" id="total-blog-posts">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Draft Posts</h3>
+                        <p class="stat-number" id="draft-blog-posts">-</p>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="pending">Pending Articles</button>
+                    <button class="tab-btn" data-tab="blog">Blog Posts</button>
+                    <button class="tab-btn" data-tab="create-blog">Create Post</button>
+                    <button class="tab-btn" data-tab="settings">Settings</button>
+                </div>
+
+                <!-- Pending Articles Tab -->
+                <div id="pending-tab" class="tab-content active">
+                    <div class="tab-header">
+                        <h2>Pending Articles</h2>
+                        <button id="fetch-news-btn" class="btn btn-primary">Fetch New Articles</button>
+                    </div>
+                    <div id="pending-articles-list" class="admin-articles-list">
+                        <div class="loading">Loading pending articles...</div>
+                    </div>
+                </div>
+
+                <!-- Blog Posts Tab -->
+                <div id="blog-tab" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Your Blog Posts</h2>
+                    </div>
+                    <div id="blog-posts-list" class="admin-blog-list">
+                        <div class="loading">Loading blog posts...</div>
+                    </div>
+                </div>
+
+                <!-- Create Blog Post Tab -->
+                <div id="create-blog-tab" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Create New Blog Post</h2>
+                    </div>
+                    <form id="blog-post-form" class="blog-form">
+                        <input type="hidden" id="edit-post-id" value="">
+                        <div class="form-group">
+                            <label for="blog-title">Title *</label>
+                            <input type="text" id="blog-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="blog-excerpt">Excerpt (brief summary) *</label>
+                            <textarea id="blog-excerpt" rows="3" maxlength="300" required></textarea>
+                            <small>Max 300 characters</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="blog-content">Content *</label>
+                            <textarea id="blog-content" rows="15" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="blog-category">Category</label>
+                                <select id="blog-category">
+                                    <option value="Opinion">Opinion</option>
+                                    <option value="AI">AI</option>
+                                    <option value="Software">Software</option>
+                                    <option value="Hardware">Hardware</option>
+                                    <option value="Tutorial">Tutorial</option>
+                                    <option value="Review">Review</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="blog-image">Image URL (optional)</label>
+                                <input type="url" id="blog-image">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="blog-tags">Tags (comma-separated)</label>
+                            <input type="text" id="blog-tags" placeholder="ai, chatgpt, opinion">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Publish Post</button>
+                            <button type="button" id="save-draft-btn" class="btn btn-secondary">Save as Draft</button>
+                            <button type="button" id="clear-form-btn" class="btn btn-outline">Clear Form</button>
+                        </div>
+                        <div id="blog-form-message" class="form-message"></div>
+                    </form>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings-tab" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Settings</h2>
+                    </div>
+                    <div class="settings-content">
+                        <h3>PayPal Integration</h3>
+                        <p>To update your PayPal donation button:</p>
+                        <ol>
+                            <li>Edit the <code>index.html</code> and <code>about.html</code> files</li>
+                            <li>Replace <code>YOUR_PAYPAL_EMAIL</code> with your actual PayPal email</li>
+                            <li>Or use a PayPal-generated button code</li>
+                        </ol>
+
+                        <h3>News Fetching</h3>
+                        <p>Articles are automatically fetched every 2 hours from trusted tech sources.</p>
+                        <p>You can manually trigger a fetch using the "Fetch New Articles" button above.</p>
+
+                        <h3>Database</h3>
+                        <p>Make sure your MongoDB connection is configured in the <code>.env</code> file.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>

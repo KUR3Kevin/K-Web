@@ -1,66 +1,154 @@
-# Quick Start Guide
+# Quick Start Guide - Tech Insights
 
-## How to Run the Game
+Get your tech news website up and running in 5 minutes!
 
-### Option 1: Open Directly in Browser
-1. Navigate to the project folder
-2. Double-click `index.html`
-3. The game will open in your default browser
-4. Start playing immediately!
+## Prerequisites
+- Node.js installed (v14+)
+- MongoDB installed locally OR MongoDB Atlas account (free)
 
-### Option 2: Using a Local Server (Recommended)
+## Step 1: Run Setup Script
 ```bash
-# If you have Python 3 installed:
-python3 -m http.server 8000
-
-# If you have Python 2:
-python -m SimpleHTTPServer 8000
-
-# If you have Node.js with npx:
-npx http-server
-
-# If you have PHP:
-php -S localhost:8000
+./setup.sh
 ```
 
-Then open your browser and go to: `http://localhost:8000`
+This will:
+- Install all dependencies
+- Create `.env` file from template
 
-## First Time Playing?
+## Step 2: Configure Environment
 
-1. **Start Simple**: You begin with $5,000 cash and $3,000 monthly income
-2. **Review Your Budget**: Check your monthly expenses and adjust if needed
-3. **Try Savings First**: Deposit $1,000 into your savings account
-4. **Click "Next Month"**: Watch your savings earn interest!
-5. **Experiment**: Try buying stocks, taking on debt, or adjusting your expenses
+### Option A: Local MongoDB
+If you have MongoDB installed locally:
+```bash
+# Start MongoDB
+brew services start mongodb-community  # macOS
+# or: sudo systemctl start mongod       # Linux
 
-## Pro Tips for Your First Game
+# .env file will use: mongodb://localhost:27017/tech-news
+```
 
-1. **Keep expenses below income** - This gives you money to save and invest
-2. **Build an emergency fund** - Save at least $3,000 before investing heavily
-3. **Avoid credit card debt** - 18% interest is expensive!
-4. **Diversify investments** - Don't put all your money in one stock
-5. **Be patient** - Compound interest works best over many months
+### Option B: MongoDB Atlas (Cloud - Free)
+1. Go to [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
+2. Create free account and cluster
+3. Get connection string
+4. Edit `.env` and update `MONGODB_URI`:
+   ```
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/tech-news
+   ```
 
-## What to Learn
+### Generate Admin Password
+```bash
+node -e "console.log(require('bcryptjs').hashSync('your-password', 10))"
+```
 
-As you play, pay attention to:
-- How compound interest grows your savings exponentially
-- How stock prices fluctuate but trend upward over time
-- How debt interest can quickly spiral out of control
-- How living below your means creates financial freedom
-- How different financial decisions impact your net worth
+Copy the output and paste it in `.env` as `ADMIN_PASSWORD_HASH`.
+
+### Edit .env File
+```bash
+# Open .env and configure:
+MONGODB_URI=your-mongodb-connection-string
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD_HASH=paste-hash-here
+SESSION_SECRET=change-to-random-string
+```
+
+## Step 3: Start the Server
+```bash
+cd backend
+npm start
+```
+
+You should see:
+```
+MongoDB Connected: ...
+Server running on port 5000
+Frontend: http://localhost:5000
+API: http://localhost:5000/api
+```
+
+## Step 4: Visit Your Site
+Open browser and go to:
+- **Homepage**: http://localhost:5000
+- **Admin Dashboard**: http://localhost:5000/admin
+
+Login with credentials from `.env`
+
+## Step 5: Fetch Your First Articles
+1. Go to admin dashboard
+2. Click "Fetch New Articles" button
+3. Wait for articles to load
+4. Approve the ones you like!
+5. Visit the news page to see them live
+
+## Optional: Configure PayPal Donations
+
+Edit these files and replace `YOUR_PAYPAL_EMAIL`:
+- `frontend/public/index.html` (line ~79)
+- `frontend/public/pages/about.html` (line ~137)
+
+Replace with your actual PayPal email address.
+
+## Customization Ideas
+
+### Change Site Name
+Search and replace "Tech Insights" in all files with your site name.
+
+### Change Colors
+Edit `frontend/public/css/styles.css`:
+```css
+:root {
+  --color-crimson: #DC143C;  /* Change to your color */
+  --color-green: #90EE90;    /* Change to your color */
+  --color-tan: #D2B48C;      /* Change to your color */
+}
+```
+
+### Add More News Sources
+Edit `backend/services/newsFetcher.js`:
+```javascript
+const RSS_FEEDS = [
+  { url: 'https://techcrunch.com/feed/', name: 'TechCrunch' },
+  { url: 'https://your-source.com/feed/', name: 'Your Source' },
+];
+```
+
+## Troubleshooting
+
+### Port 5000 already in use?
+Change port in `.env`:
+```
+PORT=3000
+```
+
+### Can't connect to MongoDB?
+- Check MongoDB is running: `brew services list` (macOS)
+- Verify connection string in `.env`
+- For Atlas: Check IP whitelist (allow 0.0.0.0/0 for testing)
+
+### No articles showing?
+1. Check admin dashboard for pending articles
+2. Click "Fetch New Articles" manually
+3. Approve some articles
+4. Visit `/news` page
+
+## Development Mode
+
+For auto-restart on file changes:
+```bash
+npm run dev
+```
+
+## Next Steps
+
+1. ✅ Write your first blog post from admin dashboard
+2. ✅ Customize the About page with your info
+3. ✅ Approve some articles
+4. ✅ Share your site!
 
 ## Need Help?
 
-Click the **❓ Help** button in the game for detailed strategies and explanations.
-
-## Goals to Achieve
-
-- 🎯 Save $5,000 (Emergency Fund)
-- 📈 Build $3,000 portfolio (Investment Starter)
-- 💳 Pay off all debt (Debt Free)
-- 💰 Reach $20,000 net worth (Wealth Builder)
+Check the full [README.md](README.md) for detailed documentation.
 
 ---
 
-**Ready? Open `index.html` and start your financial journey!**
+Happy curating! 🚀
