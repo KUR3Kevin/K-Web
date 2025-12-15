@@ -20,6 +20,13 @@
   --color-gray: #cccccc;
   --color-gray-dark: #666666;
 
+  /* New Glossy Card Colors - Dark greenish-tan */
+  --color-card-base: #7a6a48;
+  --color-card-hover: #8a7a58;
+  --color-greenish-tan: #7a6a48;
+  --glossy-highlight: rgba(255, 255, 255, 0.4);
+  --glossy-shadow: rgba(0, 0, 0, 0.2);
+
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Lora', serif;
   --font-accent: 'Cinzel', serif;
@@ -28,6 +35,26 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-glossy: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Puzzle Wiggle Animation */
+@keyframes puzzle-wiggle {
+  0% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-2px) translateX(1px) rotate(0.5deg);
+  }
+  50% {
+    transform: translateY(-1px) translateX(-1px) rotate(-0.5deg);
+  }
+  75% {
+    transform: translateY(-2px) translateX(1px) rotate(0.5deg);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
 }
 
 /* Reset & Base Styles */
@@ -136,14 +163,17 @@ a:hover {
 }
 
 .btn-donate {
-  background-color: var(--color-green);
-  color: var(--color-black);
+  background-color: var(--color-greenish-tan);
+  color: white;
   font-weight: 700;
+  box-shadow: var(--shadow-glossy);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .btn-donate:hover {
-  background-color: var(--color-green-dark);
-  color: var(--color-black);
+  background-color: var(--color-card-hover);
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Header */
@@ -197,15 +227,18 @@ a:hover {
 }
 
 .donate-btn {
-  background-color: var(--color-green) !important;
-  color: var(--color-black) !important;
+  background-color: var(--color-greenish-tan) !important;
+  color: white !important;
   padding: 0.5rem 1.25rem !important;
   border-radius: 4px;
   font-weight: 600;
+  box-shadow: var(--shadow-glossy);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .donate-btn:hover {
-  background-color: var(--color-green-dark) !important;
+  background-color: var(--color-card-hover) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Hero Section (Homepage) */
@@ -250,17 +283,20 @@ a:hover {
 }
 
 .feature-card {
-  background-color: var(--color-tan-light);
+  background-color: var(--color-card-base);
   padding: 2rem;
   border-radius: 8px;
   text-align: center;
   transition: var(--transition);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-glossy);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  animation: puzzle-wiggle 2s ease-in-out infinite;
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+  background-color: var(--color-card-hover);
 }
 
 .feature-icon {
@@ -345,17 +381,25 @@ a:hover {
 
 /* Featured Article */
 .featured-article {
-  background-color: var(--color-darker-bg);
+  background-color: var(--color-card-base);
   color: white;
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 3rem;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-glossy);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   display: none;
+  animation: puzzle-wiggle 3s ease-in-out infinite;
+  transition: var(--transition);
 }
 
 .featured-article.visible {
   display: block;
+}
+
+.featured-article:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+  background-color: var(--color-card-hover);
 }
 
 .featured-article img {
@@ -406,19 +450,22 @@ a:hover {
 
 .article-card,
 .blog-card {
-  background-color: white;
+  background-color: var(--color-card-base);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-glossy);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   transition: var(--transition);
   display: flex;
   flex-direction: column;
+  animation: puzzle-wiggle 2.2s ease-in-out infinite;
 }
 
 .article-card:hover,
 .blog-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+  background-color: var(--color-card-hover);
 }
 
 .article-card img,
@@ -655,16 +702,19 @@ a:hover {
 }
 
 .interest-card {
-  background-color: white;
+  background-color: var(--color-card-base);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-glossy);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   transition: var(--transition);
+  animation: puzzle-wiggle 2.4s ease-in-out infinite;
 }
 
 .interest-card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+  background-color: var(--color-card-hover);
 }
 
 .interest-icon {
@@ -684,10 +734,21 @@ a:hover {
 }
 
 .focus-item {
-  background-color: var(--color-tan-light);
+  background-color: var(--color-card-base);
   padding: 1.5rem;
   border-radius: 8px;
   border-left: 4px solid var(--color-crimson);
+  box-shadow: var(--shadow-glossy);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  animation: puzzle-wiggle 2.6s ease-in-out infinite;
+  transition: var(--transition);
+}
+
+.focus-item:hover {
+  background-color: var(--color-card-hover);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .focus-item h4 {
@@ -864,11 +925,19 @@ a:hover {
 }
 
 .stat-card {
-  background-color: white;
+  background-color: var(--color-card-base);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-glossy);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   text-align: center;
+  animation: puzzle-wiggle 2.8s ease-in-out infinite;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  background-color: var(--color-card-hover);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .stat-card h3 {
