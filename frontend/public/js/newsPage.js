@@ -236,6 +236,7 @@ function displayFeaturedArticle(article) {
         <span class="source">${article.sourceName}</span>
         <span class="date">${formatRelativeTime(article.publishedDate)}</span>
       </div>
+      <button class="btn btn-secondary" onclick='openArticleModal(${JSON.stringify(article).replace(/'/g, "&#39;")})' style="margin-right: 1rem;">View Details</button>
       <a href="${article.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Read Full Article</a>
     </div>
   `;
@@ -247,6 +248,7 @@ function displayFeaturedArticle(article) {
 function createArticleCard(article) {
   const card = document.createElement('div');
   card.className = 'article-card';
+  card.style.cursor = 'pointer';
 
   const imageHtml = article.imageUrl
     ? `<img src="${article.imageUrl}" alt="${article.title}" onerror="this.style.display='none'">`
@@ -262,9 +264,16 @@ function createArticleCard(article) {
         <span class="source">${article.sourceName}</span>
         <span class="date">${formatRelativeTime(article.publishedDate)}</span>
       </div>
-      <a href="${article.sourceUrl}" target="_blank" rel="noopener noreferrer" class="read-more">Read More</a>
+      <a href="${article.sourceUrl}" target="_blank" rel="noopener noreferrer" class="read-more" onclick="event.stopPropagation()">Read More</a>
     </div>
   `;
+
+  // Add click handler to open modal
+  card.addEventListener('click', (e) => {
+    // Don't open modal if clicking on the link
+    if (e.target.tagName === 'A') return;
+    openArticleModal(article);
+  });
 
   return card;
 }
@@ -333,4 +342,62 @@ document.addEventListener('DOMContentLoaded', () => {
       fetchArticles(currentCategory, currentPage, true);
     });
   }
+
+  // Modal close handlers
+  const modal = document.getElementById('article-modal');
+  const modalClose = document.querySelector('.modal-close');
+  const modalBackdrop = document.querySelector('.modal-backdrop');
+
+  if (modalClose) {
+    modalClose.addEventListener('click', closeArticleModal);
+  }
+
+  if (modalBackdrop) {
+    modalBackdrop.addEventListener('click', closeArticleModal);
+  }
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeArticleModal();
+    }
+  });
 });
+
+// Open article modal
+function openArticleModal(article) {
+  const modal = document.getElementById('article-modal');
+  const modalBody = document.getElementById('modal-body');
+
+  const imageHtml = article.imageUrl
+    ? `<img src="${article.imageUrl}" alt="${article.title}" class="modal-image" onerror="this.style.display='none'">`
+    : '';
+
+  // Get category class for styling
+  const categoryClass = article.category.replace('/', '');
+
+  modalBody.innerHTML = `
+    ${imageHtml}
+    <span class="modal-category category-badge ${categoryClass}">${article.category}</span>
+    <h2 class="modal-title">${article.title}</h2>
+    <div class="modal-meta">
+      <span class="source"><strong>Source:</strong> ${article.sourceName}</span>
+      <span class="date"><strong>Published:</strong> ${formatRelativeTime(article.publishedDate)}</span>
+    </div>
+    <div class="modal-summary">${article.summary}</div>
+    <div class="modal-actions">
+      <a href="${article.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Read Full Article</a>
+      <button onclick="closeArticleModal()" class="btn btn-secondary">Close</button>
+    </div>
+  `;
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+// Close article modal
+function closeArticleModal() {
+  const modal = document.getElementById('article-modal');
+  modal.classList.remove('active');
+  document.body.style.overflow = ''; // Restore scrolling
+}

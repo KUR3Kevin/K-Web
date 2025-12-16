@@ -12,7 +12,12 @@ const RSS_FEEDS = [
   { url: 'https://www.theverge.com/rss/index.xml', name: 'The Verge' },
   { url: 'https://arstechnica.com/feed/', name: 'Ars Technica' },
   { url: 'https://venturebeat.com/category/ai/feed/', name: 'VentureBeat AI' },
-  { url: 'https://www.wired.com/feed/rss', name: 'Wired' }
+  { url: 'https://www.wired.com/feed/rss', name: 'Wired' },
+  { url: 'https://www.engadget.com/rss.xml', name: 'Engadget' },
+  { url: 'https://www.cnet.com/rss/news/', name: 'CNET' },
+  { url: 'https://www.zdnet.com/news/rss.xml', name: 'ZDNet' },
+  { url: 'https://feeds.feedburner.com/TheNextWeb', name: 'The Next Web' },
+  { url: 'https://www.theguardian.com/technology/rss', name: 'The Guardian Tech' }
 ];
 
 // Keywords for categorization and filtering

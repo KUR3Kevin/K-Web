@@ -342,6 +342,9 @@ async function editBlogPost(postId) {
     document.getElementById('blog-title').value = post.title;
     document.getElementById('blog-excerpt').value = post.excerpt;
     document.getElementById('blog-content').value = post.content;
+    if (quill) {
+      quill.root.innerHTML = post.content;
+    }
     document.getElementById('blog-category').value = post.category;
     document.getElementById('blog-image').value = post.imageUrl || '';
     document.getElementById('blog-tags').value = post.tags ? post.tags.join(', ') : '';
@@ -417,6 +420,9 @@ document.getElementById('blog-post-form')?.addEventListener('submit', async (e) 
       setTimeout(() => {
         document.getElementById('blog-post-form').reset();
         document.getElementById('edit-post-id').value = '';
+        if (quill) {
+          quill.setContents([]);
+        }
         messageDiv.textContent = '';
         document.querySelector('#blog-post-form button[type="submit"]').textContent = 'Publish Post';
       }, 2000);
@@ -472,6 +478,9 @@ document.getElementById('save-draft-btn')?.addEventListener('click', async () =>
       setTimeout(() => {
         document.getElementById('blog-post-form').reset();
         document.getElementById('edit-post-id').value = '';
+        if (quill) {
+          quill.setContents([]);
+        }
         messageDiv.textContent = '';
         document.querySelector('#blog-post-form button[type="submit"]').textContent = 'Publish Post';
       }, 2000);
@@ -493,6 +502,9 @@ document.getElementById('save-draft-btn')?.addEventListener('click', async () =>
 document.getElementById('clear-form-btn')?.addEventListener('click', () => {
   document.getElementById('blog-post-form').reset();
   document.getElementById('edit-post-id').value = '';
+  if (quill) {
+    quill.setContents([]);
+  }
   document.getElementById('blog-form-message').textContent = '';
   document.querySelector('#blog-post-form button[type="submit"]').textContent = 'Publish Post';
 });
@@ -523,7 +535,38 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
+// Initialize Quill Rich Text Editor
+let quill;
+
+function initQuill() {
+  if (document.getElementById('blog-content-editor')) {
+    quill = new Quill('#blog-content-editor', {
+      theme: 'snow',
+      modules: {
+        toolbar: [
+          [{ 'header': [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ 'color': [] }, { 'background': [] }],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'align': [] }],
+          ['blockquote', 'code-block'],
+          ['link', 'image'],
+          ['clean']
+        ]
+      },
+      placeholder: 'Write your blog post content here...'
+    });
+
+    // Sync Quill content with hidden textarea
+    quill.on('text-change', function() {
+      document.getElementById('blog-content').value = quill.root.innerHTML;
+    });
+  }
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
   checkAuth();
+  // Initialize Quill after DOM is loaded
+  setTimeout(initQuill, 100);
 });

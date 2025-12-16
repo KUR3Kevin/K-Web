@@ -12,6 +12,7 @@ const { fetchAllNews } = require('./services/newsFetcher');
 const articlesRouter = require('./routes/articles');
 const blogRouter = require('./routes/blog');
 const adminRouter = require('./routes/admin');
+const mobileRouter = require('./routes/mobile');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.use('/api/articles', articlesRouter);
 app.use('/api/blog', blogRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/mobile', mobileRouter);
 
 // Manual trigger for news fetch (admin only)
 app.post('/api/admin/fetch-news', async (req, res) => {
