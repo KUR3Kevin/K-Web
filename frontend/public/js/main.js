@@ -101,8 +101,9 @@ function setupDonateButton() {
         donateBtn.style.transform = '';
       }, 150);
 
-      // This will be replaced with actual PayPal form
-      alert('PayPal donation form will open here. Please configure your PayPal email in the HTML files.');
+      // Open PayPal donation page
+      const paypalUrl = 'https://www.paypal.com/donate/?business=marselk96johnsonjr@outlook.com&currency_code=USD';
+      window.open(paypalUrl, '_blank');
     });
   }
 }
@@ -128,8 +129,92 @@ function addPageTransitions() {
   });
 }
 
+// Article Modal System
+function createArticleModal() {
+  // Create modal HTML
+  const modalHTML = `
+    <div id="articleModal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeArticleModal()">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <div class="modal-meta" id="modalMeta"></div>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-footer">
+          <a id="modalReadMore" href="#" target="_blank" class="btn btn-primary">Read Full Article</a>
+          <button onclick="closeArticleModal()" class="btn btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Add modal to body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function openArticleModal(title, summary, source, date, url) {
+  const modal = document.getElementById('articleModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalMeta = document.getElementById('modalMeta');
+  const modalBody = document.getElementById('modalBody');
+  const modalReadMore = document.getElementById('modalReadMore');
+
+  // Populate modal content
+  modalTitle.textContent = title;
+  modalMeta.innerHTML = `<strong>Source:</strong> ${source} | <strong>Date:</strong> ${date}`;
+  modalBody.innerHTML = `
+    <p>${summary}</p>
+    <p><strong>About this article:</strong></p>
+    <p>This article covers important developments in the tech industry. Our team curates content that reflects innovation, ethical practices, and meaningful progress in technology - prioritizing human values over profit margins.</p>
+    <p>We believe in technology that serves humanity, promotes fairness, and respects life. Click "Read Full Article" below to view the complete story from the original source.</p>
+  `;
+  modalReadMore.href = url;
+
+  // Show modal with animation
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeArticleModal() {
+  const modal = document.getElementById('articleModal');
+  modal.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('articleModal');
+  if (modal && e.target === modal) {
+    closeArticleModal();
+  }
+});
+
 // Initialize enhanced features
 document.addEventListener('DOMContentLoaded', () => {
+  createArticleModal();
   setupDonateButton();
   addPageTransitions();
+  setupArticleClickHandlers();
 });
+
+// Setup article click handlers
+function setupArticleClickHandlers() {
+  // Add click handlers to all "Read More" links
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('read-more') || e.target.closest('.article-card')) {
+      e.preventDefault();
+
+      const articleCard = e.target.closest('.article-card');
+      if (articleCard) {
+        const title = articleCard.querySelector('.article-title')?.textContent || 'Tech Article';
+        const summary = articleCard.querySelector('.article-summary')?.textContent || 'Exciting developments in technology...';
+        const source = articleCard.querySelector('.source')?.textContent || 'Tech News';
+        const date = articleCard.querySelector('.article-meta')?.textContent?.split('|')[1]?.trim() || 'Recent';
+        const url = articleCard.querySelector('.read-more')?.href || '#';
+
+        openArticleModal(title, summary, source, date, url);
+      }
+    }
+  });
+}
