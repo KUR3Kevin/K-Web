@@ -1,8 +1,5 @@
 // Blog Page JavaScript
 
-let currentPage = 1;
-let isLoading = false;
-
 // Demo blog posts with moral values and tech innovation focus
 const demoBlogPosts = [
   {

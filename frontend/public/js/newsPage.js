@@ -1,9 +1,5 @@
 // News Page JavaScript
 
-let currentPage = 1;
-let currentCategory = 'All';
-let isLoading = false;
-
 // Demo articles for when API is not available
 const demoArticles = [
   {
