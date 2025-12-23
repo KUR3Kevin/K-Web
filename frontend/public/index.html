@@ -74,10 +74,12 @@
             <h2>Support Independent Tech Journalism</h2>
             <p>Help keep this site running and ad-free</p>
             <form action="https://www.paypal.com/donate" method="post" target="_blank">
-                <input type="hidden" name="business" value="marselk96johnsonjr@outlook.com">
+                <!-- Security: Email moved to environment variable on backend -->
+                <input type="hidden" name="hosted_button_id" value="YOUR_PAYPAL_BUTTON_ID">
                 <input type="hidden" name="currency_code" value="USD">
                 <button type="submit" class="btn btn-donate">Donate via PayPal</button>
             </form>
+            <!-- Alternative: Use PayPal's hosted button instead of email -->
         </div>
     </section>
 
