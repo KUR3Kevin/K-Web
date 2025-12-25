@@ -115,40 +115,30 @@ app.use(session({
   }
 }));
 
-// Serve static files from frontend
-app.use(express.static(path.join(__dirname, '../frontend/public')));
-
-// API Routes
+// API Routes (must come before static file serving)
 app.use('/api/articles', articlesRouter);
 app.use('/api/blog', blogRouter);
 app.use('/api/admin', adminRouter);
 
-// Serve HTML pages
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
-});
+// Serve static files from React build in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-app.get('/news', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/pages/news.html'));
-});
-
-app.get('/blog', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/pages/blog.html'));
-});
-
-app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/pages/about.html'));
-});
-
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/pages/admin.html'));
-});
-
-// Security: 404 handler
-app.use((req, res, next) => {
-  logger.warn(`404 - Not Found: ${req.method} ${req.url}`);
-  res.status(404).json({ error: 'Not Found' });
-});
+  // Handle client-side routing - serve index.html for all non-API routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  });
+} else {
+  // Development: Serve old frontend or show message
+  app.get('/', (req, res) => {
+    res.send(`
+      <h1>Development Mode</h1>
+      <p>Run the React frontend separately with: <code>cd frontend && npm run dev</code></p>
+      <p>API is running on port ${PORT}</p>
+      <p>Frontend will run on port 3000</p>
+    `);
+  });
+}
 
 // Security: Global error handler
 app.use((err, req, res, next) => {

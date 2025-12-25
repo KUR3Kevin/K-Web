@@ -1,291 +1,315 @@
-# Tech Insights - Tech News Aggregation Website
+# Tech Insights - Secure Full-Stack Tech News Platform
 
-A modern tech news aggregation platform with automated RSS feed fetching, manual article approval, personal blogging, and PayPal donation integration.
+A modern, security-hardened tech news aggregation platform built with React, Express, and MongoDB. Features automated RSS feed fetching, manual article approval, personal blogging with XSS prevention, and production-ready security measures.
 
-## Features
+## 🔒 Security Features
 
-- **Automated News Aggregation**: Fetches tech news from TechCrunch, The Verge, Ars Technica, and more every 2 hours
-- **Manual Approval Workflow**: Review and approve articles before they appear on your site
-- **Personal Blog**: Write and publish your own opinion pieces on tech topics
-- **Category Filtering**: AI, Software, Hardware, Crypto/Stocks
-- **Admin Dashboard**: Manage articles and blog posts with ease
-- **Responsive Design**: Beautiful UI with black, red, light green, and tan color scheme
-- **PayPal Donations**: Integrated donation button for site support
+This application has been architected with security as the top priority:
 
-## Tech Stack
+### Authentication & Authorization
+- ✅ Secure session-based authentication with HTTP-only cookies
+- ✅ Bcrypt password hashing (cost factor: 10)
+- ✅ Rate limiting on login endpoint (5 attempts per 15 minutes)
+- ✅ Timing attack prevention
+- ✅ CSRF protection ready (csrf-csrf package included)
 
-### Backend
-- **Node.js** + **Express**: Server framework
-- **MongoDB** + **Mongoose**: Database
-- **RSS Parser**: News feed aggregation
-- **Node-cron**: Scheduled news fetching
-- **bcryptjs**: Password hashing
-- **Express-session**: Admin authentication
+### XSS Prevention
+- ✅ **react-markdown** with **rehype-sanitize** for safe content rendering
+- ✅ AI-generated markdown content rendered securely
+- ✅ No `dangerouslySetInnerHTML` usage
+- ✅ Content Security Policy (CSP) headers
 
-### Frontend
-- **Vanilla JavaScript**: No framework dependencies
-- **HTML5** + **CSS3**: Semantic, responsive design
-- **Google Fonts**: Playfair Display, Lora, Cinzel
+### API Security
+- ✅ Rate limiting on authentication endpoints
+- ✅ Input validation and sanitization (express-validator)
+- ✅ MongoDB injection prevention (mongoose-sanitize)
+- ✅ Request body size limits (100kb)
+- ✅ Secure CORS configuration
 
-## Installation
+### Infrastructure Security
+- ✅ Helmet.js for comprehensive security headers
+- ✅ HTTPS enforcement in production
+- ✅ Secure session configuration
+- ✅ Environment variable protection
+- ✅ Structured logging with Winston
+- ✅ No sensitive data in client-side code
+
+## 🏗️ Architecture
+
+### Backend (Express.js + MongoDB)
+- Production-ready Node.js server
+- Secure session management
+- RESTful API with rate limiting
+- Automated news fetching every 2 hours
+- Comprehensive error handling
+
+### Frontend (React + Vite)
+- Modern React with React Router
+- Fast HMR with Vite
+- Secure markdown rendering
+- Component-based architecture
+- Production-optimized builds
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB (local or MongoDB Atlas account)
+- Node.js 16+
+- MongoDB (local or Atlas)
 
-### Steps
+### Installation
 
-1. **Clone the repository**
+1. **Clone and install dependencies**
 ```bash
 git clone <your-repo-url>
 cd <repo-directory>
+npm run install-all
 ```
 
-2. **Install backend dependencies**
+2. **Configure environment variables**
 ```bash
-cd backend
-npm install
+cp .env.example .env
 ```
 
-3. **Set up environment variables**
+Edit `.env` and set:
+- `MONGODB_URI` - Your MongoDB connection string
+- `ADMIN_PASSWORD_HASH` - Generate with: `node -e "console.log(require('bcryptjs').hashSync('your-password', 10))"`
+- `SESSION_SECRET` - Generate with: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
+- `CLIENT_URL` - Your production domain
+
+3. **Run in development**
 ```bash
-cp ../.env.example .env
-```
-
-Edit `.env` and configure:
-- `MONGODB_URI`: Your MongoDB connection string
-- `ADMIN_USERNAME`: Your admin username
-- `ADMIN_PASSWORD_HASH`: Generate with the command below
-- `SESSION_SECRET`: Random secret key
-
-To generate password hash:
-```bash
-node -e "console.log(require('bcryptjs').hashSync('your-password', 10))"
-```
-
-4. **Configure PayPal (optional)**
-
-Edit the following files and replace `YOUR_PAYPAL_EMAIL` with your PayPal email:
-- `frontend/public/index.html`
-- `frontend/public/pages/about.html`
-
-Or use a PayPal-generated button code.
-
-5. **Start the server**
-```bash
-# From backend directory
-npm start
-
-# Or for development with auto-restart:
+# Run both frontend and backend concurrently
 npm run dev
+
+# Or run separately:
+npm run dev:backend  # Backend on port 5000
+npm run dev:frontend # Frontend on port 3000
 ```
 
-The server will start on `http://localhost:5000`
+### Production Build
 
-## Usage
-
-### Public Pages
-- **Homepage**: `/` - Welcome page with features
-- **News**: `/news` - Browse approved tech articles
-- **Blog**: `/blog` - Read personal blog posts
-- **About**: `/about` - Learn about the site and tech interests
-
-### Admin Dashboard
-1. Navigate to `/admin`
-2. Login with credentials from `.env`
-3. **Pending Articles Tab**: Approve or reject fetched articles
-4. **Blog Posts Tab**: Manage your blog posts
-5. **Create Post Tab**: Write new blog posts
-6. **Settings Tab**: Configuration info
-
-### Admin Functions
-- **Approve Articles**: Review fetched articles and approve the ones you want to publish
-- **Fetch News Manually**: Click "Fetch New Articles" to manually trigger RSS fetching
-- **Create Blog Posts**: Write opinion pieces with markdown-like formatting
-- **Save Drafts**: Save blog posts without publishing
-
-## Configuration
-
-### News Sources
-Edit `backend/services/newsFetcher.js` to add/remove RSS feeds:
-```javascript
-const RSS_FEEDS = [
-  { url: 'https://techcrunch.com/feed/', name: 'TechCrunch' },
-  // Add more feeds here
-];
-```
-
-### Keywords & Categories
-Customize keyword filtering in `backend/services/newsFetcher.js`:
-```javascript
-const KEYWORDS = {
-  AI: ['ai', 'chatgpt', 'claude', ...],
-  Software: ['software', 'update', ...],
-  // Add more categories/keywords
-};
-```
-
-### Fetch Schedule
-Change the cron schedule in `backend/server.js`:
-```javascript
-// Current: Every 2 hours
-cron.schedule('0 */2 * * *', async () => { ... });
-
-// Example: Every hour
-cron.schedule('0 * * * *', async () => { ... });
-```
-
-## MongoDB Setup
-
-### Local MongoDB
 ```bash
-# Install MongoDB
-brew install mongodb-community  # macOS
-# or follow instructions for your OS
+# Build frontend
+npm run build
 
-# Start MongoDB
-brew services start mongodb-community
-
-# Use connection string in .env:
-MONGODB_URI=mongodb://localhost:27017/tech-news
+# Start production server (serves React build + API)
+NODE_ENV=production npm start
 ```
 
-### MongoDB Atlas (Cloud)
-1. Create free account at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a cluster
-3. Get connection string
-4. Update `.env`:
-```
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/tech-news
-```
+## 📁 Project Structure
 
-## Deployment
-
-### Recommended Platforms
-- **Backend**: [Render.com](https://render.com), [Railway.app](https://railway.app), or Heroku
-- **Database**: MongoDB Atlas (free tier)
-
-### Environment Variables
-Set these on your hosting platform:
-- `MONGODB_URI`
-- `ADMIN_USERNAME`
-- `ADMIN_PASSWORD_HASH`
-- `SESSION_SECRET`
-- `NODE_ENV=production`
-
-### Build Command
-```bash
-npm install
-```
-
-### Start Command
-```bash
-npm start
-```
-
-## Project Structure
 ```
 /
 ├── backend/
-│   ├── server.js              # Express server
-│   ├── package.json           # Dependencies
+│   ├── server.js              # Express server with security
+│   ├── package.json
 │   ├── config/
 │   │   └── database.js        # MongoDB connection
 │   ├── models/
 │   │   ├── Article.js         # Article schema
 │   │   └── BlogPost.js        # Blog post schema
 │   ├── routes/
-│   │   ├── articles.js        # Article routes
-│   │   ├── blog.js            # Blog routes
-│   │   └── admin.js           # Admin routes
+│   │   ├── articles.js        # Article API routes
+│   │   ├── blog.js            # Blog API routes
+│   │   └── admin.js           # Admin routes with auth
 │   ├── services/
-│   │   └── newsFetcher.js     # RSS aggregation
+│   │   └── newsFetcher.js     # RSS aggregation service
 │   └── middleware/
-│       └── auth.js            # Authentication
+│       └── auth.js            # Authentication middleware
 ├── frontend/
-│   └── public/
-│       ├── index.html         # Homepage
-│       ├── pages/             # Other HTML pages
-│       ├── css/
-│       │   └── styles.css     # Main stylesheet
-│       └── js/                # JavaScript files
+│   ├── src/
+│   │   ├── App.jsx            # Router setup
+│   │   ├── components/        # Shared components
+│   │   │   ├── Header.jsx
+│   │   │   └── Footer.jsx
+│   │   ├── pages/             # Page components
+│   │   │   ├── Home.jsx
+│   │   │   ├── News.jsx
+│   │   │   ├── Blog.jsx       # XSS-protected rendering
+│   │   │   ├── About.jsx
+│   │   │   └── Admin.jsx      # Secure admin panel
+│   │   ├── services/
+│   │   │   └── api.js         # API service layer
+│   │   └── index.css          # Global styles
+│   ├── vite.config.js         # Vite config with proxy
+│   └── package.json
 ├── .env.example               # Environment template
-└── README.md
+├── .gitignore
+├── package.json               # Root scripts
+├── README.md
+└── SECURITY.md
 ```
 
-## Customization
+## 🔐 Security Best Practices
 
-### Colors
-Edit CSS variables in `frontend/public/css/styles.css`:
-```css
-:root {
-  --color-crimson: #DC143C;
-  --color-green: #90EE90;
-  --color-tan: #D2B48C;
-  /* ... */
-}
+### Before Deployment
+
+1. **Generate Strong Secrets**
+```bash
+# SESSION_SECRET (32+ random characters)
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+
+# ADMIN_PASSWORD_HASH
+node -e "console.log(require('bcryptjs').hashSync('YOUR-SECURE-PASSWORD', 10))"
 ```
 
-### Typography
-Change fonts in HTML files:
-```html
-<link href="https://fonts.googleapis.com/css2?family=Your+Font&display=swap" rel="stylesheet">
+2. **Set Environment Variables**
+- Never commit `.env` to version control
+- Use different secrets for dev/production
+- Store production `.env` securely (password manager)
+
+3. **Enable HTTPS**
+- Use Let's Encrypt for free SSL certificates
+- Configure reverse proxy (nginx/Apache)
+- Set `NODE_ENV=production`
+
+4. **Database Security**
+- Enable MongoDB authentication
+- Use IP whitelisting
+- Enable encryption at rest
+
+## 📚 API Endpoints
+
+### Public Endpoints
+```
+GET  /api/articles              # Get approved articles
+GET  /api/blog                  # Get published blog posts
+GET  /api/blog/:id              # Get single blog post
 ```
 
-### Site Name
-Search and replace "Tech Insights" across all files.
+### Admin Endpoints (Authentication Required)
+```
+POST  /api/admin/login          # Admin login
+POST  /api/admin/logout         # Admin logout
+GET   /api/admin/status         # Check auth status
+GET   /api/admin/dashboard      # Get dashboard stats
+POST  /api/admin/fetch-news     # Manually fetch news
+GET   /api/articles/pending     # Get unapproved articles
+PATCH /api/articles/:id/approve # Approve article
+DELETE /api/articles/:id        # Delete article
+POST  /api/blog                 # Create blog post
+PATCH /api/blog/:id             # Update blog post
+DELETE /api/blog/:id            # Delete blog post
+```
 
-## API Endpoints
+## 🎨 Features
 
-### Public
-- `GET /api/articles` - Get approved articles
-- `GET /api/blog` - Get published blog posts
-- `GET /api/blog/:id` - Get single blog post
+### News Aggregation
+- Automated fetching from TechCrunch, The Verge, Ars Technica, Wired, VentureBeat
+- Smart categorization (AI, Software, Hardware, Crypto/Stocks)
+- Manual approval workflow
+- Featured article display
 
-### Admin (requires authentication)
-- `POST /api/admin/login` - Login
-- `POST /api/admin/logout` - Logout
-- `GET /api/admin/status` - Check auth status
-- `GET /api/admin/dashboard` - Get stats
-- `GET /api/articles/pending` - Get unapproved articles
-- `PATCH /api/articles/:id/approve` - Approve article
-- `DELETE /api/articles/:id` - Delete article
-- `POST /api/blog` - Create blog post
-- `PATCH /api/blog/:id` - Update blog post
-- `DELETE /api/blog/:id` - Delete blog post
+### Blog Platform
+- Markdown-based blog posts
+- **XSS-protected rendering** with react-markdown + rehype-sanitize
+- Category and tag support
+- Draft/publish workflow
+- Image URL support
 
-## Troubleshooting
+### Admin Dashboard
+- Real-time statistics
+- Approve/reject articles
+- Create/edit/delete blog posts
+- Manual news fetch trigger
+- Secure session management
 
-### Port already in use
-Change `PORT` in `.env` to another port (e.g., 3000, 8080)
+## 🔧 Configuration
 
-### MongoDB connection failed
-- Check `MONGODB_URI` is correct
-- Ensure MongoDB is running (local) or accessible (Atlas)
-- Check firewall/network settings
+### News Sources
+Edit `backend/services/newsFetcher.js` to customize RSS feeds:
+```javascript
+const RSS_FEEDS = [
+  { url: 'https://techcrunch.com/feed/', name: 'TechCrunch' },
+  // Add more feeds
+];
+```
 
-### Admin login not working
+### Fetch Schedule
+Modify cron schedule in `backend/server.js`:
+```javascript
+// Every 2 hours (default)
+cron.schedule('0 */2 * * *', async () => { ... });
+
+// Every hour
+cron.schedule('0 * * * *', async () => { ... });
+```
+
+## 🚀 Deployment
+
+### Recommended Platforms
+- **Backend**: Render.com, Railway.app, or Heroku
+- **Database**: MongoDB Atlas (free tier)
+- **CDN**: Cloudflare (optional)
+
+### Environment Variables for Production
+```bash
+NODE_ENV=production
+MONGODB_URI=<your-mongodb-atlas-uri>
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD_HASH=<bcrypt-hash>
+SESSION_SECRET=<random-32-char-string>
+CLIENT_URL=https://yourdomain.com
+PORT=5000
+```
+
+### Build Commands
+```bash
+# Build command
+npm run build
+
+# Start command
+npm start
+```
+
+## 📝 Development Scripts
+
+```bash
+npm run install-all   # Install all dependencies
+npm run dev           # Run frontend & backend concurrently
+npm run dev:backend   # Run backend only (port 5000)
+npm run dev:frontend  # Run frontend only (port 3000)
+npm run build         # Build React app for production
+npm start             # Start production server
+```
+
+## 🐛 Troubleshooting
+
+### MongoDB Connection Failed
+- Verify `MONGODB_URI` in `.env`
+- Check MongoDB is running (local) or accessible (Atlas)
+- Ensure IP whitelist includes your server IP
+
+### Admin Login Not Working
 - Verify `ADMIN_PASSWORD_HASH` is correctly generated
 - Check browser console for errors
 - Clear cookies and try again
+- Check `security.log` for login attempts
 
-### No articles appearing
-- Run manual fetch from admin dashboard
-- Check RSS feed URLs are accessible
-- Review console logs for errors
+### Build Errors
+- Delete `node_modules` and run `npm run install-all`
+- Clear frontend cache: `cd frontend && rm -rf node_modules .vite dist`
+- Ensure Node.js version is 16+
 
-## Contributing
+## 📊 Monitoring
 
-This is a personal project. Feel free to fork and customize for your own use!
+Log files (in `backend/`):
+- `error.log` - Application errors
+- `combined.log` - All requests
+- `security.log` - Authentication events
 
-## License
+## 🤝 Contributing
 
-MIT License - feel free to use and modify as needed.
+This is a personal project. Feel free to fork and customize!
 
-## Support
+## 📄 License
 
-If you find this project helpful, consider supporting via the PayPal donation button on the site!
+MIT License - See LICENSE file
+
+## 🆘 Support
+
+For security issues, please see SECURITY.md for responsible disclosure.
 
 ---
 
-**Built with Node.js, Express, MongoDB, and passion for technology** 🚀
+**Built with security, performance, and user privacy in mind** 🔒

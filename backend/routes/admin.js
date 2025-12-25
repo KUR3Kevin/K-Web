@@ -129,7 +129,7 @@ router.get('/dashboard', isAuthenticated, async (req, res) => {
       draftBlogPosts: await BlogPost.countDocuments({ published: false })
     };
 
-    res.json({ stats });
+    res.json(stats);
   } catch (error) {
     logger.error('Dashboard stats error:', { error: error.message });
     res.status(500).json({ error: 'Internal server error' });
