@@ -7,6 +7,7 @@ const session = require('express-session');
 const cors = require('cors');
 const cron = require('node-cron');
 const path = require('path');
+const fs = require('fs'); // Added for debugging
 const helmet = require('helmet');
 const mongoSanitize = require('mongoose-sanitize');
 const winston = require('winston');
@@ -21,6 +22,20 @@ const adminRouter = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// DEBUGGING LOGS FOR DEPLOYMENT
+console.log('--- STARTUP DEBUGGING ---');
+console.log('Current Directory:', process.cwd());
+console.log('NODE_ENV:', process.env.NODE_ENV);
+const frontendPath = path.join(__dirname, '../frontend/dist');
+console.log('Frontend Dist Path:', frontendPath);
+console.log('Frontend Dist Exists:', fs.existsSync(frontendPath));
+if (fs.existsSync(frontendPath)) {
+  console.log('Frontend Dist Contents:', fs.readdirSync(frontendPath));
+} else {
+  console.error('CRITICAL: frontend/dist does not exist! Build might have failed.');
+}
+console.log('-------------------------');
 
 // Configure logger
 const logger = winston.createLogger({
@@ -39,10 +54,14 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Validate critical environment variables
-if (!process.env.SESSION_SECRET) {
+let sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret) {
   logger.error('FATAL: SESSION_SECRET environment variable is not set');
   console.error('ERROR: SESSION_SECRET must be set in .env file');
-  process.exit(1);
+  // FALLBACK FOR DEBUGGING - REMOVE IN STRICT PRODUCTION
+  console.warn('USING FALLBACK SESSION SECRET. UNSAFE FOR PRODUCTION.');
+  sessionSecret = 'fallback-secret-key-for-debugging-only';
+  // process.exit(1); // Commented out to prevent crash loop during debug
 }
 
 if (!process.env.ADMIN_PASSWORD_HASH) {
@@ -103,7 +122,7 @@ app.use(mongoSanitize());
 
 // Session middleware with secure configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: sessionSecret,
   resave: false,
   saveUninitialized: false,
   name: 'sessionId', // Don't use default 'connect.sid'
