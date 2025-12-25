@@ -7,7 +7,7 @@
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "build": "npm install && npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "build": "npm install && cd backend && npm install && cd ../frontend && npm install && npm run build",
     "start": "cd backend && npm start",
     "postbuild": "echo 'Build complete! Frontend built to frontend/dist/'",
     "deploy": "npm run build && npm start"
